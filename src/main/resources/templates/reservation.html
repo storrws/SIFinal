@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Seat Reservation</title>
+    <style>
+        .seat-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 100px); /* 4 columns: A, B, C, D */
+            grid-gap: 10px;
+            margin-bottom: 20px;
+        }
+        .seat-tile {
+            padding: 20px;
+            text-align: center;
+            border: 1px solid black;
+            border-radius: 5px;
+        }
+        .available {
+            background-color: #c8e6c9;
+        }
+        .reserved {
+            background-color: #ffcdd2;
+        }
+    </style>
+</head>
+<body>
+<h1>Reserve Your Seat</h1>
+<!-- Error Notification Script -->
+<script th:if="${errorMessage}">
+    alert([[${errorMessage}]]);
+</script>
+
+<!-- Seat Matrix -->
+<div class="seat-grid">
+    <!-- Column A -->
+    <div th:text="${seatMatrix['A1'] == 'Available' ? 'A1' : seatMatrix['A1']}"
+         th:classappend="${seatMatrix['A1'] == 'Available' ? 'available' : 'reserved'}"
+         class="seat-tile"></div>
+    <div th:text="${seatMatrix['A2'] == 'Available' ? 'A2' : seatMatrix['A2']}"
+         th:classappend="${seatMatrix['A2'] == 'Available' ? 'available' : 'reserved'}"
+         class="seat-tile"></div>
+    <div th:text="${seatMatrix['A3'] == 'Available' ? 'A3' : seatMatrix['A3']}"
+         th:classappend="${seatMatrix['A3'] == 'Available' ? 'available' : 'reserved'}"
+         class="seat-tile"></div>
+    <div th:text="${seatMatrix['A4'] == 'Available' ? 'A4' : seatMatrix['A4']}"
+         th:classappend="${seatMatrix['A4'] == 'Available' ? 'available' : 'reserved'}"
+         class="seat-tile"></div>
+
+    <!-- Column B -->
+    <div th:text="${seatMatrix['B1'] == 'Available' ? 'B1' : seatMatrix['B1']}"
+         th:classappend="${seatMatrix['B1'] == 'Available' ? 'available' : 'reserved'}"
+         class="seat-tile"></div>
+    <div th:text="${seatMatrix['B2'] == 'Available' ? 'B2' : seatMatrix['B2']}"
+         th:classappend="${seatMatrix['B2'] == 'Available' ? 'available' : 'reserved'}"
+         class="seat-tile"></div>
+    <div th:text="${seatMatrix['B3'] == 'Available' ? 'B3' : seatMatrix['B3']}"
+         th:classappend="${seatMatrix['B3'] == 'Available' ? 'available' : 'reserved'}"
+         class="seat-tile"></div>
+    <div th:text="${seatMatrix['B4'] == 'Available' ? 'B4' : seatMatrix['B4']}"
+         th:classappend="${seatMatrix['B4'] == 'Available' ? 'available' : 'reserved'}"
+         class="seat-tile"></div>
+
+    <!-- Column C -->
+    <div th:text="${seatMatrix['C1'] == 'Available' ? 'C1' : seatMatrix['C1']}"
+         th:classappend="${seatMatrix['C1'] == 'Available' ? 'available' : 'reserved'}"
+         class="seat-tile"></div>
+    <div th:text="${seatMatrix['C2'] == 'Available' ? 'C2' : seatMatrix['C2']}"
+         th:classappend="${seatMatrix['C2'] == 'Available' ? 'available' : 'reserved'}"
+         class="seat-tile"></div>
+    <div th:text="${seatMatrix['C3'] == 'Available' ? 'C3' : seatMatrix['C3']}"
+         th:classappend="${seatMatrix['C3'] == 'Available' ? 'available' : 'reserved'}"
+         class="seat-tile"></div>
+    <div th:text="${seatMatrix['C4'] == 'Available' ? 'C4' : seatMatrix['C4']}"
+         th:classappend="${seatMatrix['C4'] == 'Available' ? 'available' : 'reserved'}"
+         class="seat-tile"></div>
+
+    <!-- Column D -->
+    <div th:text="${seatMatrix['D1'] == 'Available' ? 'D1' : seatMatrix['D1']}"
+         th:classappend="${seatMatrix['D1'] == 'Available' ? 'available' : 'reserved'}"
+         class="seat-tile"></div>
+    <div th:text="${seatMatrix['D2'] == 'Available' ? 'D2' : seatMatrix['D2']}"
+         th:classappend="${seatMatrix['D2'] == 'Available' ? 'available' : 'reserved'}"
+         class="seat-tile"></div>
+    <div th:text="${seatMatrix['D3'] == 'Available' ? 'D3' : seatMatrix['D3']}"
+         th:classappend="${seatMatrix['D3'] == 'Available' ? 'available' : 'reserved'}"
+         class="seat-tile"></div>
+    <div th:text="${seatMatrix['D4'] == 'Available' ? 'D4' : seatMatrix['D4']}"
+         th:classappend="${seatMatrix['D4'] == 'Available' ? 'available' : 'reserved'}"
+         class="seat-tile"></div>
+</div>
+
+<!-- Available Seats Counter -->
+<p>There are <span th:text="${availableSeatsCount}"></span> remaining seats.</p>
+
+<form action="/reserve" method="post">
+    <label for="seatCode">Seat Code (e.g., A1): </label>
+    <input type="text" id="seatCode" name="seatCode" required><br><br>
+    <label for="customerName">Customer Name: </label>
+    <input type="text" id="customerName" name="customerName" required><br><br>
+    <button type="submit">Reserve</button>
+</form>
+
+<h2>Current Reservations</h2>
+<ul>
+    <li th:each="reservation : ${reservations}">
+        <span th:text="${reservation.seatCode}">Seat Code</span> -
+        <span th:text="${reservation.customerName}">Customer Name</span>
+        on <span th:text="${reservation.transactionDate}">Transaction Date</span>
+        <a th:href="@{/edit/{id}(id=${reservation.id})}">Edit</a>
+        <a th:href="@{/delete/{id}(id=${reservation.id})}"
+           onclick="return confirm('Are you sure you want to delete this reservation?');">Delete</a>
+    </li>
+</ul>
+</body>
+</html>
+
